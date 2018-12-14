@@ -52015,6 +52015,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'app',
@@ -52142,6 +52149,30 @@ var render = function() {
                       attrs: { width: "200px" }
                     },
                     [
+                      _c(
+                        "div",
+                        {
+                          staticStyle: {
+                            "text-align": "center",
+                            height: "60px"
+                          }
+                        },
+                        [
+                          _vm.isCollapse
+                            ? _c("span", { staticClass: "logo-mini" }, [
+                                _c("b", [_vm._v("LA")])
+                              ])
+                            : _vm._e(),
+                          _vm._v(" "),
+                          !_vm.isCollapse
+                            ? _c("span", { staticClass: "logo-lg" }, [
+                                _c("b", [_vm._v("Laravel")]),
+                                _vm._v("-Admin")
+                              ])
+                            : _vm._e()
+                        ]
+                      ),
+                      _vm._v(" "),
                       _c(
                         "el-menu",
                         {

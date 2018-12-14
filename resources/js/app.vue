@@ -58,6 +58,12 @@
             <!--<el-container class="main-container">-->
             <el-container style="border: 1px solid #eee">
                 <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
+                    <div style="text-align: center;height: 60px;">
+                        <!-- mini logo for sidebar mini 50x50 pixels -->
+                        <span class="logo-mini" v-if="isCollapse"><b>LA</b></span>
+                        <!-- logo for regular state and mobile devices -->
+                        <span class="logo-lg" v-if="!isCollapse"><b>Laravel</b>-Admin</span>
+                    </div>
                     <el-menu
                             :default-active="active"
                             class="el-menu-custom"
@@ -77,6 +83,7 @@
                 </el-aside>
 
                 <el-container>
+
                     <el-header style="text-align: right; font-size: 12px">
                         <el-dropdown>
                             <i class="el-icon-setting" style="margin-right: 15px"></i>
