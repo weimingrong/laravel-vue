@@ -14,3 +14,15 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+//api
+Route::prefix('/api/')->group(function (){
+    Route::namespace('Auth')->group(function (){
+        Route::post('login', 'LoginController@login');
+        Route::post('logout', 'LoginController@logout');
+    });
+
+    Route::namespace('System')->group(function (){
+        Route::post('get/path/info', 'RuleController@getPathInfo');
+    });
+});
