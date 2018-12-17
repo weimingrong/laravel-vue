@@ -1,61 +1,7 @@
 <template>
     <div>
         <el-container v-if="isLogin">
-            <!--<el-header style="height: 50px;padding:0" class="main-header">-->
-                <!--&lt;!&ndash; Logo &ndash;&gt;-->
-                <!--<a href="index2.html" class="logo" :style="logoStyle">-->
-                    <!--&lt;!&ndash; mini logo for sidebar mini 50x50 pixels &ndash;&gt;-->
-                    <!--<span class="logo-mini" v-if="isCollapse"><b>LA</b></span>-->
-                    <!--&lt;!&ndash; logo for regular state and mobile devices &ndash;&gt;-->
-                    <!--<span class="logo-lg" v-if="!isCollapse"><b>Laravel</b>-Admin</span>-->
-                <!--</a>-->
 
-                <!--&lt;!&ndash; Header Navbar: style can be found in header.less &ndash;&gt;-->
-                <!--<nav class="navbar navbar-static-top" :style="navbarStyle">-->
-                    <!--<el-row>-->
-                        <!--<el-col :span="4">-->
-                            <!--<a type="text" class="sidebar-toggle" data-toggle="offcanvas" @click="switchNav">&nbsp;</a>-->
-                        <!--</el-col>-->
-                        <!--<el-col :span="20" style="float:right">-->
-                            <!--<el-row style="float: right">-->
-                                <!--&lt;!&ndash; Navbar Right Menu &ndash;&gt;-->
-                                <!--<el-dropdown trigger="click" class="user-info-menu" >-->
-                                    <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown" >-->
-                                        <!--<img :src="userInfo.avatar || '/img/avatar.jpg'" class="user-image" alt="User Image">-->
-                                        <!--<span class="hidden-xs">{{userInfo.username}}</span>-->
-                                    <!--</a>-->
-                                    <!--<el-dropdown-menu slot="dropdown" class="dropdown-menu">-->
-                                        <!--<el-dropdown-item class="user-header" >-->
-                                            <!--<img :src="userInfo.avatar || '/img/avatar.jpg'" class="img-circle" alt="User Image">-->
-
-                                            <!--<p>-->
-                                                <!--{{userInfo.username}} - {{userInfo.realname}}<br/>-->
-                                                <!--<small>Member since {{toDate(userInfo.create_time)}}</small>-->
-                                            <!--</p>-->
-                                        <!--</el-dropdown-item>-->
-
-                                        <!--<el-dropdown-item class="user-footer" :divided="true">-->
-                                            <!--<div class="pull-left">-->
-                                                <!--<router-link :to="'/system/profile'" >-->
-                                                    <!--<el-button type="text" @click="">设置</el-button>-->
-                                                <!--</router-link>-->
-
-                                            <!--</div>-->
-                                            <!--<div class="pull-right">-->
-                                                <!--<el-button type="text" @click="logout">退出</el-button>-->
-                                            <!--</div>-->
-                                        <!--</el-dropdown-item>-->
-
-                                    <!--</el-dropdown-menu>-->
-                                <!--</el-dropdown>-->
-                            <!--</el-row>-->
-
-                        <!--</el-col>-->
-                    <!--</el-row>-->
-
-                <!--</nav>-->
-            <!--</el-header>-->
-            <!--<el-container class="main-container">-->
             <el-container style="border: 1px solid #eee">
                 <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
                     <div style="text-align: center;height: 60px;">
@@ -108,7 +54,7 @@
                         </el-breadcrumb>
                         <hr style="color:#ccc;"/>
                         <router-view>
-                            <router-link tag="li" to="/">Home</router-link>
+
                         </router-view>
                     </el-main>
 

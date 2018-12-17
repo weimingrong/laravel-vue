@@ -17,6 +17,8 @@ Route::get('/', function () {
 
 //api
 Route::prefix('/api/')->group(function (){
+    Route::get('test', 'IndexController@test');
+
     Route::namespace('Auth')->group(function (){
         Route::post('login', 'LoginController@login');
         Route::post('logout', 'LoginController@logout');
@@ -24,5 +26,9 @@ Route::prefix('/api/')->group(function (){
 
     Route::namespace('System')->group(function (){
         Route::post('get/path/info', 'RuleController@getPathInfo');
+
+        //用户管理
+        Route::post('admin/loglist', 'AdminController@getLogs');
     });
+
 });

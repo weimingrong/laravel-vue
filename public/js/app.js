@@ -29,7 +29,7 @@
 /******/
 /******/ 	// objects to store loaded and loading chunks
 /******/ 	var installedChunks = {
-/******/ 		1: 0
+/******/ 		6: 0
 /******/ 	};
 /******/
 /******/ 	// The require function
@@ -51968,60 +51968,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'app',
@@ -52321,17 +52267,7 @@ var render = function() {
                           _vm._v(" "),
                           _c("hr", { staticStyle: { color: "#ccc" } }),
                           _vm._v(" "),
-                          _c(
-                            "router-view",
-                            [
-                              _c(
-                                "router-link",
-                                { attrs: { tag: "li", to: "/" } },
-                                [_vm._v("Home")]
-                              )
-                            ],
-                            1
-                          )
+                          _c("router-view")
                         ],
                         1
                       )
@@ -96400,7 +96336,7 @@ module.exports = function (css) {
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
-    get: function get(uel, params) {
+    get: function get(url, params) {
         return new Promise(function (resolve, reject) {
             axios.get(url, { params: params }).then(function (res) {
                 //未登录
@@ -96955,7 +96891,7 @@ var vueRoutes = {
         name: 'hello',
         path: '/',
         component: function component(resolve) {
-            return void __webpack_require__.e/* require */(0).then(function() { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__(206)]; ((resolve).apply(null, __WEBPACK_AMD_REQUIRE_ARRAY__));}.bind(this)).catch(__webpack_require__.oe);
+            return void __webpack_require__.e/* require */(5).then(function() { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__(211)]; ((resolve).apply(null, __WEBPACK_AMD_REQUIRE_ARRAY__));}.bind(this)).catch(__webpack_require__.oe);
         }
     }]
 };
@@ -99596,8 +99532,34 @@ if (inBrowser && window.Vue) {
 "use strict";
 /* harmony default export */ __webpack_exports__["a"] = ([{
     name: 'group',
-    path: '/system/group'
-    // component: resolve => void (require([]))
+    path: '/system/group',
+    component: function component(resolve) {
+        return void __webpack_require__.e/* require */(3).then(function() { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__(206)]; ((resolve).apply(null, __WEBPACK_AMD_REQUIRE_ARRAY__));}.bind(this)).catch(__webpack_require__.oe);
+    }
+}, {
+    name: 'profile',
+    path: '/system/profile',
+    component: function component(resolve) {
+        return void __webpack_require__.e/* require */(1).then(function() { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__(207)]; ((resolve).apply(null, __WEBPACK_AMD_REQUIRE_ARRAY__));}.bind(this)).catch(__webpack_require__.oe);
+    }
+}, {
+    name: 'admin',
+    path: '/system/admin',
+    component: function component(resolve) {
+        return void __webpack_require__.e/* require */(4).then(function() { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__(208)]; ((resolve).apply(null, __WEBPACK_AMD_REQUIRE_ARRAY__));}.bind(this)).catch(__webpack_require__.oe);
+    }
+}, {
+    name: 'rule',
+    path: '/system/rule',
+    component: function component(resolve) {
+        return void __webpack_require__.e/* require */(0).then(function() { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__(209)]; ((resolve).apply(null, __WEBPACK_AMD_REQUIRE_ARRAY__));}.bind(this)).catch(__webpack_require__.oe);
+    }
+}, {
+    name: 'logs',
+    path: '/system/logs',
+    component: function component(resolve) {
+        return void __webpack_require__.e/* require */(2).then(function() { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__(210)]; ((resolve).apply(null, __WEBPACK_AMD_REQUIRE_ARRAY__));}.bind(this)).catch(__webpack_require__.oe);
+    }
 }]);
 
 /***/ }),

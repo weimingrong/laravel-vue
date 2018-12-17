@@ -1,7 +1,7 @@
 import message from 'element-ui/lib/message.js'
 
 export default {
-    get(uel, params){
+    get(url, params){
         return new Promise((resolve, reject) => {
             axios.get(url, {params:params}).then(function(res){
                 //未登录
