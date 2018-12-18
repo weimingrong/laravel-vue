@@ -48,7 +48,7 @@
                         <span>{{userInfo.username}}</span>
                     </el-header>
 
-                    <el-main>
+                    <el-main style="background-color: white">
                         <el-breadcrumb separator="/">
                             <el-breadcrumb-item :to="{ path: item.name }" v-for="item in navBre" :key="item.id">{{item.title}}</el-breadcrumb-item>
                         </el-breadcrumb>

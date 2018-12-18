@@ -54,4 +54,26 @@ class Admin extends Model
         ]);
     }
 
+    /**
+     * 更新用户密码
+     * @param $uid
+     * @param $password
+     */
+    public function updatePassword($uid, $password){
+        $this->where(['id' => $uid])->update([
+            'password' => password_hash($password, PASSWORD_DEFAULT, ['cost' => 12])
+        ]);
+
+    }
+
+    /**
+     * 更新用户头像
+     * @param $uid
+     * @param $avatar
+     */
+    public function updateAvatar($uid, $avatar){
+        $this->where(['id' => $uid])->update([
+           'avatar' => $avatar
+        ]);
+    }
 }

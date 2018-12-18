@@ -195,7 +195,14 @@ var render = function() {
     [
       _c(
         "el-form",
-        { attrs: { inline: true, size: "small", model: _vm.form } },
+        {
+          attrs: {
+            inline: true,
+            size: "small",
+            model: _vm.form,
+            "label-width": "100px"
+          }
+        },
         [
           _c(
             "el-form-item",

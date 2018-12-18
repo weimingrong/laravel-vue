@@ -52248,6 +52248,7 @@ var render = function() {
                       _vm._v(" "),
                       _c(
                         "el-main",
+                        { staticStyle: { "background-color": "white" } },
                         [
                           _c(
                             "el-breadcrumb",

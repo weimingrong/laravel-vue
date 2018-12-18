@@ -29,6 +29,12 @@ Route::prefix('/api/')->group(function (){
 
         //用户管理
         Route::post('admin/loglist', 'AdminController@getLogs');
+        //profile
+        Route::post('admin/password/change', 'AdminController@changePassword');
+        Route::post('admin/avatar/save', 'AdminController@saveAvatar');
+        Route::post('admin/avatar/upload', 'AdminController@uploadAvatar');
+        Route::get('admin/userinfo/get', 'AdminController@getUserinfo');
+        //
     });
 
 });

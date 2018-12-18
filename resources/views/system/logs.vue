@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-form :inline="true" size="small" :model="form">
+        <el-form :inline="true" size="small" :model="form" label-width="100px">
             <el-form-item label="管理员">
                 <el-input v-model="form.admin_id" placeholder="管理员ID"></el-input>
             </el-form-item>

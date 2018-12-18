@@ -15,7 +15,6 @@ class SystemLogs extends Model
 {
     protected $table = "v1_admin_log";
 
-    protected $fillable = ['admin_id', 'operator', 'ip', 'func', 'url', 'remark', 'detail'];
     protected static $instance;
 
     public static function getInstance(){

@@ -87,7 +87,7 @@ exports = module.exports = __webpack_require__(49)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n.avatar-uploader .el-upload[data-v-6c532c42] {\n    border: 1px dashed #d9d9d9;\n    border-radius: 6px;\n    cursor: pointer;\n    position: relative;\n    overflow: hidden;\n}\n.avatar-uploader .el-upload[data-v-6c532c42]:hover {\n    border-color: #409EFF;\n}\n.avatar-uploader-icon[data-v-6c532c42] {\n    font-size: 28px;\n    color: #8c939d;\n    width: 145px;\n    height: 178px;\n    line-height: 150px;\n    text-align: center;\n}\n.avatar[data-v-6c532c42] {\n    width: 145px;\n    height: 150px;\n    display: block;\n}\n.form[data-v-6c532c42]{\n    width: 600px;\n    margin-right: auto;\n    margin-left: auto;\n}\n", ""]);
 
 // exports
 
@@ -103,9 +103,190 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    name: "profile"
+    name: "profile",
+    mounted: function mounted() {
+        this.getProfile();
+    },
+    data: function data() {
+        var _this = this;
+
+        var validatePass = function validatePass(rule, value, callback) {
+            if (value === '') {
+                callback(new Error('请输入密码'));
+            } else if (value.length < 6) {
+                callback(new Error('密码不能少于6位'));
+            } else {
+                if (_this.saveForm.check_password !== '') {
+                    _this.$refs.saveForm.validateField('check_password');
+                }
+                callback();
+            }
+        };
+        var validatePassCheck = function validatePassCheck(rule, value, callback) {
+            if (value === '') {
+                callback(new Error('请再次输入密码'));
+            } else if (value !== _this.saveForm.password) {
+                callback(new Error('两次输入密码不一致'));
+            } else {
+                callback();
+            }
+        };
+        return {
+            imageUrl: '',
+            labelPosition: 'right',
+            saveForm: {
+                old_password: '',
+                check_password: '',
+                password: ''
+            },
+            rules: {
+                old_password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+                password: [{ validator: validatePass, trigger: 'blur' }],
+                check_password: [{ validator: validatePassCheck, trigger: 'blur' }]
+            },
+            csrfToken: $('meta[name="csrf-token"]').attr('content')
+        };
+    },
+
+    methods: {
+        handleAvatarSuccess: function handleAvatarSuccess(res, file) {
+            this.imageUrl = res.data.img_path;
+            // this.imageUrl = URL.createObjectURL(file.raw);
+            console.log(this.imageUrl);
+        },
+        beforeAvatarUpload: function beforeAvatarUpload(file) {
+            var isJPG = file.type === 'image/png';
+            var isLt2M = file.size / 1024 / 1024 < 2;
+
+            if (!isJPG) {
+                this.$message.error('上传头像图片只能是png格式');
+            }
+
+            if (!isLt2M) {
+                this.$message.error('上传头像图片大小不能超过2M');
+            }
+        },
+        onSubmit: function onSubmit(formName) {
+            var _this2 = this;
+
+            var vm = this;
+            this.$refs[formName].validate(function (valid) {
+                if (valid) {
+                    _this2.$http.post('/api/admin/password/change', _this2.saveForm).then(function (res) {
+                        if (res.error === 0) {
+                            _this2.$message({
+                                message: '保存成功',
+                                type: 'success'
+                            });
+                        } else {
+                            _this2.$message({
+                                message: res.msg,
+                                type: 'error'
+                            });
+                        }
+
+                        setTimeout(function () {
+                            vm.$router.push('/system/profile');
+                        }, 1000);
+                    });
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
+        },
+        resetForm: function resetForm(formName) {
+            this.$refs[formName].resetFields();
+        },
+        saveAvatar: function saveAvatar() {
+            var _this3 = this;
+
+            if (!this.imageUrl) {
+                this.$message.error('请上传头像！');
+                return false;
+            }
+            var vm = this;
+            this.$http.post('/api/admin/avatar/save', { avatar: this.imageUrl }).then(function (res) {
+                if (res.error === 0) {
+                    setTimeout(function () {
+                        console.log(1);
+                        vm.$router.push('/system/profile');
+                    }, 1000);
+                    _this3.$message({
+                        message: '保存成功',
+                        type: 'success'
+                    });
+                } else {
+                    _this3.$message({
+                        message: res.msg,
+                        type: 'error'
+                    });
+                }
+            });
+        },
+        getProfile: function getProfile() {
+            var _this4 = this;
+
+            this.$http.get('/api/admin/userinfo/get', {}).then(function (res) {
+                if (res.error === 0) {
+                    _this4.imageUrl = res.data.avatar;
+                }
+            });
+        }
+    }
 });
 
 /***/ }),
@@ -117,7 +298,209 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div")
+  return _c(
+    "div",
+    [
+      _c("el-alert", { attrs: { title: "个人资料", type: "info" } }),
+      _vm._v(" "),
+      _c("br"),
+      _c("br"),
+      _vm._v(" "),
+      _c(
+        "el-row",
+        [
+          _c(
+            "el-col",
+            [
+              _c(
+                "el-form",
+                {
+                  staticClass: "form",
+                  attrs: {
+                    "label-position": _vm.labelPosition,
+                    "label-width": "100px"
+                  }
+                },
+                [
+                  _c(
+                    "el-form-item",
+                    { attrs: { label: "上传头像", prop: "pass" } },
+                    [
+                      _c(
+                        "el-upload",
+                        {
+                          attrs: {
+                            "list-type": "picture-card",
+                            action: "/api/admin/avatar/upload",
+                            "show-file-list": false,
+                            "on-success": _vm.handleAvatarSuccess,
+                            "before-upload": _vm.beforeAvatarUpload,
+                            headers: { "X-CSRF-TOKEN": _vm.csrfToken }
+                          }
+                        },
+                        [
+                          _vm.imageUrl
+                            ? _c("img", {
+                                staticClass: "avatar",
+                                attrs: { src: _vm.imageUrl }
+                              })
+                            : _c("i", {
+                                staticClass: "el-icon-plus avatar-uploader-icon"
+                              })
+                        ]
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "el-form-item",
+                    { staticStyle: { "margin-top": "50px" } },
+                    [
+                      _c(
+                        "el-button",
+                        {
+                          attrs: { type: "primary" },
+                          on: { click: _vm.saveAvatar }
+                        },
+                        [_vm._v("保存")]
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("el-alert", { attrs: { title: "修改密码", type: "info" } }),
+      _vm._v(" "),
+      _c("br"),
+      _c("br"),
+      _vm._v(" "),
+      _c(
+        "el-row",
+        [
+          _c(
+            "el-col",
+            [
+              _c(
+                "el-form",
+                {
+                  ref: "saveForm",
+                  staticClass: "form",
+                  attrs: {
+                    "label-position": _vm.labelPosition,
+                    model: _vm.saveForm,
+                    "label-width": "100px",
+                    rules: _vm.rules
+                  }
+                },
+                [
+                  _c(
+                    "el-form-item",
+                    { attrs: { label: "原密码", prop: "old_password" } },
+                    [
+                      _c("el-input", {
+                        staticStyle: { width: "300px" },
+                        attrs: { type: "password", autocomplete: "off" },
+                        model: {
+                          value: _vm.saveForm.old_password,
+                          callback: function($$v) {
+                            _vm.$set(_vm.saveForm, "old_password", $$v)
+                          },
+                          expression: "saveForm.old_password"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "el-form-item",
+                    { attrs: { label: "新密码", prop: "password" } },
+                    [
+                      _c("el-input", {
+                        staticStyle: { width: "300px" },
+                        attrs: { type: "password", autocomplete: "off" },
+                        model: {
+                          value: _vm.saveForm.password,
+                          callback: function($$v) {
+                            _vm.$set(_vm.saveForm, "password", $$v)
+                          },
+                          expression: "saveForm.password"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "el-form-item",
+                    { attrs: { label: "确认密码", prop: "check_password" } },
+                    [
+                      _c("el-input", {
+                        staticStyle: { width: "300px" },
+                        attrs: { type: "password", autocomplete: "off" },
+                        model: {
+                          value: _vm.saveForm.check_password,
+                          callback: function($$v) {
+                            _vm.$set(_vm.saveForm, "check_password", $$v)
+                          },
+                          expression: "saveForm.check_password"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "el-form-item",
+                    [
+                      _c(
+                        "el-button",
+                        {
+                          attrs: { type: "primary" },
+                          on: {
+                            click: function($event) {
+                              _vm.onSubmit("saveForm")
+                            }
+                          }
+                        },
+                        [_vm._v("提交")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "el-button",
+                        {
+                          on: {
+                            click: function($event) {
+                              _vm.resetForm("saveForm")
+                            }
+                          }
+                        },
+                        [_vm._v("重置")]
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
