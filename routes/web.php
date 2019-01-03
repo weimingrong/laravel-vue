@@ -24,7 +24,7 @@ Route::prefix('/api/')->group(function (){
         Route::post('logout', 'LoginController@logout');
     });
 
-    Route::namespace('System')->group(function (){
+    Route::prefix('system')->namespace('System')->group(function (){
         Route::post('get/path/info', 'RuleController@getPathInfo');
 
         //用户管理
@@ -37,7 +37,7 @@ Route::prefix('/api/')->group(function (){
         //admin
         Route::post('admin/list', 'AdminController@getList');
         Route::post('admin/save', 'AdminController@save');
-        Route::post('group/list', 'GroupController@getList');
+        Route::get('group/list', 'GroupController@getList');
 
     });
 

@@ -95,9 +95,11 @@
         mounted() {
             this.userInfo = JSON.parse(window.sessionStorage.getItem('userInfo'));
             this.isLogin = this.userInfo !== null;
+
             //定位默认菜单
             if(this.isLogin) {
                 this.menus = this.userInfo.menus;
+                console.log(this.menus)
             }
         },
         data() {

@@ -9,6 +9,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Http\Components\Common;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
@@ -24,5 +25,29 @@ class AuthController extends Controller
 
     public function getLoginInfo(){
         $this->loginInfo = session('loginInfo');
+    }
+
+    public function canAdd(){
+        $path = dirname($this->request->getPathInfo()) . '/save';
+        if (Common::checkPermission($path)){
+            return true;
+        }
+
+        return false;
+    }
+
+    public function canEdit(){
+        $path = dirname($this->request->getPathInfo()) . '/edit';
+        if (Common::checkPermission($path)){
+            return true;
+        }
+        return false;
+    }
+    public function canDelete(){
+        $path = dirname($this->request->getPathInfo()) . 'delete';
+        if (Common::checkPermission($path)){
+            return true;
+        }
+        return false;
     }
 }

@@ -6,6 +6,7 @@ use App\Group;
 use App\GroupAccess;
 use App\Http\Components\Code;
 use App\Http\Components\Common;
+use App\Http\Components\RbacConst;
 use App\Http\Controllers\Controller;
 use App\Rule;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -80,9 +81,17 @@ class LoginController extends Controller
         ]);
 
         //根据权限Ids 获取一级菜单项
-        $menu_item = Rule::getInstance()->getMenuItemByRuleArr($rules_arr);
+        $menu_item = Rule::getInstance()->getMenuItemByRuleArr();
+
+        $menus = [];
+        foreach ($menu_item as $row) {
+            if(in_array($row['name'], $row)) {
+                $menus[] = $row;
+            }
+        }
+
         //菜单树
-        $userInfo['menus'] = Common::generateRuleTree($menu_item, 0);
+        $userInfo['menus'] = Common::generateRuleTree($menus, 0);
 
         return $this->sendJson($userInfo);
     }
@@ -98,11 +107,28 @@ class LoginController extends Controller
             //未绑定组 登录失败
             return $this->sendError(Code::LOGIN_ERROR);
         }
-        //获取组具有的权限id
-        $rules = Group::getInstance()->getRulesByGid($groupId);
-        $rules_arr = explode(',', $rules);
 
-        return $rules_arr;
+        $data = [];
+        //超级管理员拥有所有权限
+        if ($groupId == RbacConst::SUPER_ADMIN){
+            $allRules = Rule::getInstance()->getAllRules();
+            foreach ($allRules as $rule){
+                $data[$rule['id']] = $rule['name'];
+            }
+            return $data;
+        }
+
+        //获取组具有的权限id
+        $groupRules = Group::getInstance()->getRulesByGid($groupId);
+        foreach ($groupRules as $row){
+            $rulesId_arr = explode(',', $row['rules']);
+            $rules = Rule::getInstance()->getRuleInfosByRuleIds($rulesId_arr);
+            foreach ($rules as $rule){
+                $data[$rule['id']] = $rule['name'];
+            }
+        }
+
+        return $data;
     }
 
     public function logout(Request $request){

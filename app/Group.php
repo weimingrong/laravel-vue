@@ -29,4 +29,12 @@ class Group extends Model
         $data = $this->find($gid)->rules;
         return $data;
     }
+
+    public function getList($wh){
+        $data = $this->where($wh)
+            ->orderBy('id', 'asc')
+            ->get()
+            ->toArray();
+        return $data;
+    }
 }

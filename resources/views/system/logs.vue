@@ -18,7 +18,7 @@
             <el-table-column prop="func" label="API路径"></el-table-column>
             <el-table-column prop="details" label="请求参数"></el-table-column>
             <el-table-column prop="ip" label="操作IP"></el-table-column>
-            <el-table-column prop="create_time" label="操作时间"></el-table-column>
+            <el-table-column prop="created_at" label="操作时间"></el-table-column>
         </el-table>
 
         <br/>
@@ -65,7 +65,7 @@
                 this.getList();
             },
             getList(){
-                this.$http.post('/api/admin/loglist', this.form).then(res => {
+                this.$http.post('/api/system/admin/loglist', this.form).then(res => {
                     this.tableData = res.data.data;
                     this.totalItems = res.data.total;
                 })

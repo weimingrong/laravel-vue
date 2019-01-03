@@ -148,12 +148,16 @@ class AdminController extends AuthController
         if ($res['total']){
             foreach ($res['data'] as &$row){
                 $row['last_login'] = date('Y-m-d H:i:s', $row['last_login']);
-                $row['create_time'] = date('Y-m-d H:i:s', $row['create_time']);
                 $row['groups'] = GroupAccess::getInstance()->getGroupByUid($row['id']);
             }
             $list['list'] = $res['data'];
             $list['total'] = $res['total'];
         }
+
+        $list['auth'] = [
+           'canAdd'  => $this->canAdd(),
+           'canEdit' => $this->canEdit()
+        ];
 
         return $this->sendJson($list);
     }
@@ -171,7 +175,7 @@ class AdminController extends AuthController
 
         //判断登录名是否已经存在
         $row = Admin::getInstance()->getRows(['username' => $username]);
-        if (!$row){
+        if ($row){
             return $this->sendError(Code::ADMIN_EXIST);
         }
 
@@ -189,13 +193,16 @@ class AdminController extends AuthController
                 'realname' => $realname,
                 'mobile' => $mobile,
                 'email' => $email,
-                'status' => $status
+                'status' => $status,
+                'created_at' => date('Y-m-d H:i:s', time()),
+                'updated_at' => date('Y-m-d H:i:s', time()),
             ]);
         }
 
         //更新用户组 todo
 
     }
+
     public function check(){
 
     }

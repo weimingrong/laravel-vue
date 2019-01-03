@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Storage;
 
 class Common
 {
+
     /**
      * 生成菜单树
      * @param $list
@@ -72,5 +73,36 @@ class Common
         $res['error'] = 0;
         $res['img_path'] = Storage::url($path);
         return $res;
+    }
+
+    /**
+     * 检查路由权限
+     * @param $path
+     * @param bool $isPreg
+     * @return bool
+     */
+    public static function checkPermission($path, $isPreg = false){
+        $loginInfo = session('loginInfo');
+        $rules = $loginInfo['rules'] ?? [];
+
+        if (empty($rules)){
+            return false;
+        }
+
+        if (!$isPreg){
+            $path = preg_replace('/(^\/)|(\/$)/', '', $path);
+        }
+
+        foreach ($rules as $value){
+            if (!$isPreg && ($path === $value || in_array($path, PathConst::EXCEPT_PATH))){
+                return true;
+            }
+
+            if ($isPreg && preg_match($path, $value)){
+                return true;
+            }
+        }
+
+        return false;
     }
 }

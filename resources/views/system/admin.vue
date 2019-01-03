@@ -22,7 +22,7 @@
         </el-form>
 
         <el-row>
-            <el-button type="primary" size="small">新增</el-button>
+            <el-button type="primary" size="small" v-if="auth.canAdd" @click="handleAdd">新增</el-button>
         </el-row>
 
         <el-table :data="tableData">
@@ -39,10 +39,10 @@
             </el-table-column>
             <el-table-column prop="last_login" label="最后登录时间"></el-table-column>
             <el-table-column prop="last_ip" label="最后登录IP"></el-table-column>
-            <el-table-column prop="create_time" label="创建时间"></el-table-column>
+            <el-table-column prop="created_at" label="创建时间"></el-table-column>
             <el-table-column fixed="right" label="操作" width="100">
                 <template slot-scope="scope">
-                    <el-button type="text" size="small">编辑</el-button>
+                    <el-button type="text" size="small" v-if="auth.canEdit" @click="editRow(scope.row)">编辑</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -68,9 +68,39 @@
         <br/>
 
         <el-dialog title="新增/修改管理员" :visible.sync="addNewDialog" width="35%">
-            <el-form ref="saveForm" :model="saveForm" label-width="100px" size="small">
+            <el-form ref="saveForm" :model="saveForm" label-width="100px" size="small" :rules="rulesForm">
                 <el-form-item label="登录名" prop="username">
-                    <el-input></el-input>
+                    <el-input v-model="saveForm.username" style="width: 50%"></el-input>
+                </el-form-item>
+                <el-form-item label="密码" prop="password">
+                    <el-input v-model="saveForm.password" style="width: 50%"></el-input>
+                </el-form-item>
+                <el-form-item label="用户组" prop="groups">
+                    <el-select v-model="saveForm.groups" multiple placeholder="请选择" style="width: 50%">
+                        <el-option
+                            v-for="item in groups"
+                            :key="item.id"
+                            :label="item.title"
+                            :value="item.id"
+                        >
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="真实姓名" prop="realname">
+                    <el-input v-model="saveForm.realname" style="width: 50%"></el-input>
+                </el-form-item>
+                <el-form-item label="手机号" prop="mobile">
+                    <el-input v-model="saveForm.mobile" style="width: 50%"></el-input>
+                </el-form-item>
+                <el-form-item label="邮箱" prop="email">
+                    <el-input v-model="saveForm.email" style="width: 50%"></el-input>
+                </el-form-item>
+                <el-form-item label="状态" prop="status">
+                    <el-switch v-model="saveForm.status" active-text="正常" inactive-text="禁用"></el-switch>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="onSubmit">保存</el-button>
+                    <el-button @click="addNewDialog = false">取消</el-button>
                 </el-form-item>
             </el-form>
         </el-dialog>
@@ -83,6 +113,7 @@
         name: "admin",
         mounted() {
             this.getList();
+            this.getGroupList();
         },
         data(){
             return {
@@ -98,7 +129,21 @@
                     username: '',
                     password: '',
                     groups: [],
-                    status: true
+                    status: true,
+                    realname: ''
+                },
+                auth: {},
+                groups: [],
+                rulesForm: {
+                    username: [
+                        {required: true, message: '请输入用户名称', trigger: 'blur'}
+                    ],
+                    realname: [
+                        {required: true, message: '请输入真实姓名', trigger: 'blur'}
+                    ],
+                    groups:[
+                        {required: true, message: '请选择用户组', trigger: 'blur'}
+                    ]
                 }
             }
         },
@@ -115,11 +160,76 @@
                 this.getList();
             },
             getList(){
-                this.$http.post('/api/admin/list', this.form).then(res => {
+                this.$http.post('/api/system/admin/list', this.form).then(res => {
                     this.tableData = res.data.list;
                     this.totalItems = res.data.total;
                     this.auth = res.data.auth;
                 });
+            },
+            getGroupList(){
+                this.$http.get('/api/system/group/list', {status: 1}).then(res => {
+                    this.groups = res.data.list;
+                })
+            },
+            onSubmit(){
+                this.$refs['saveForm'].validate((valid) => {
+                    if (valid){
+                        if (typeof (this.saveForm.password) === 'undefined'){
+                            this.saveForm.password = '';
+                        }
+
+                        if (!this.saveForm.id && this.saveForm.password.length < 6){
+                            this.$message({
+                                message: '请输入不少于6位的密码',
+                                type: 'error'
+                            });
+
+                            return;
+                        }
+
+                        this.$http.post('/api/system/admin/save', this.saveForm).then(res => {
+                            if (res.error == 0){
+                                this.$message({
+                                    message: '保存成功',
+                                    type: 'success'
+                                });
+                                this.addNewDialog = false;
+                                this.getList();
+                            } else{
+                                this.$message({
+                                    message: res.msg,
+                                    type: 'error'
+                                });
+                            }
+                        })
+
+                    }else {
+                        console.log('error submit');
+                        return false;
+                    }
+                })
+            },
+            handleAdd(){
+                this.addNewDialog = true;
+                if (typeof (this.$refs['saveForm']) !== 'undefined'){
+                    this.$refs['saveForm'].resetFields();
+                }
+            },
+            editRow(row){
+                this.addNewDialog = true;
+                if (typeof (this.$refs['saveForm']) !== 'undefined'){
+                    this.$refs['saveForm'].resetFields();
+                }
+
+                this.saveForm = {
+                    id: row.id,
+                    username: row.username,
+                    groups: row.groups,
+                    realname: row.realname,
+                    mobile: row.mobile,
+                    email: row.email,
+                    status: row.status === 1,
+                }
             }
         }
     }

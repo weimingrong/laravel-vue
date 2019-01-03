@@ -125,7 +125,7 @@
                 let vm = this;
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.$http.post('/api/admin/password/change', this.saveForm).then(res => {
+                        this.$http.post('/api/system/admin/password/change', this.saveForm).then(res => {
                             if(res.error === 0) {
                                 this.$message({
                                     message: '保存成功',
@@ -158,7 +158,7 @@
                     return false;
                 }
                 let vm = this;
-                this.$http.post('/api/admin/avatar/save', {avatar: this.imageUrl}).then(res => {
+                this.$http.post('/api/system/admin/avatar/save', {avatar: this.imageUrl}).then(res => {
                     if(res.error === 0) {
                         this.$message({
                             message: '保存成功',
@@ -175,7 +175,7 @@
 
             },
             getProfile(){
-                this.$http.get('/api/admin/userinfo/get', {}).then(res => {
+                this.$http.get('/api/system/admin/userinfo/get', {}).then(res => {
                     if(res.error === 0){
                         this.imageUrl = res.data.avatar;
                     }

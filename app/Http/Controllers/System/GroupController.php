@@ -8,6 +8,7 @@
 
 namespace App\Http\Controllers\System;
 
+use App\Group;
 use App\Http\Controllers\AuthController;
 
 class GroupController extends AuthController
@@ -17,6 +18,20 @@ class GroupController extends AuthController
      * @return GroupController|\Illuminate\Http\JsonResponse
      */
     public function getList(){
-        return $this->sendJson();
+        $status = $this->request->status;
+        $wh = [];
+        if (!empty($status)){
+            $wh['status'] = $status;
+        }
+        $res = Group::getInstance()->getList($wh);
+        return $this->sendJson([
+            'list' => $res,
+            'auth' => [
+                'canAdd'  => $this->canAdd(),
+                'canEdit' => $this->canEdit()
+            ]
+        ]
+
+        );
     }
 }

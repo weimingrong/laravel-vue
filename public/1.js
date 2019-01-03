@@ -225,7 +225,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var vm = this;
             this.$refs[formName].validate(function (valid) {
                 if (valid) {
-                    _this2.$http.post('/api/admin/password/change', _this2.saveForm).then(function (res) {
+                    _this2.$http.post('/api/system/admin/password/change', _this2.saveForm).then(function (res) {
                         if (res.error === 0) {
                             _this2.$message({
                                 message: '保存成功',
@@ -259,7 +259,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return false;
             }
             var vm = this;
-            this.$http.post('/api/admin/avatar/save', { avatar: this.imageUrl }).then(function (res) {
+            this.$http.post('/api/system/admin/avatar/save', { avatar: this.imageUrl }).then(function (res) {
                 if (res.error === 0) {
                     _this3.$message({
                         message: '保存成功',
@@ -276,7 +276,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         getProfile: function getProfile() {
             var _this4 = this;
 
-            this.$http.get('/api/admin/userinfo/get', {}).then(function (res) {
+            this.$http.get('/api/system/admin/userinfo/get', {}).then(function (res) {
                 if (res.error === 0) {
                     _this4.imageUrl = res.data.avatar;
                 }

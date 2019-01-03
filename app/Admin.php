@@ -86,7 +86,7 @@ class Admin extends Model
      */
     public function getList($wh, $pageSize, $page){
         $data = $this->where($wh)
-            ->orderBy('create_time', 'desc')
+            ->orderBy('created_at', 'desc')
             ->paginate($pageSize, ['*'], 'page', $page)
             ->toArray();
         return $data;

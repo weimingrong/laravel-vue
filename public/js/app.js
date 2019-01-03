@@ -51974,9 +51974,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     mounted: function mounted() {
         this.userInfo = JSON.parse(window.sessionStorage.getItem('userInfo'));
         this.isLogin = this.userInfo !== null;
+
         //定位默认菜单
         if (this.isLogin) {
             this.menus = this.userInfo.menus;
+            console.log(this.menus);
         }
     },
     data: function data() {

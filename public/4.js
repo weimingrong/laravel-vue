@@ -87,7 +87,7 @@ exports = module.exports = __webpack_require__(49)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -179,11 +179,42 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "admin",
     mounted: function mounted() {
         this.getList();
+        this.getGroupList();
     },
     data: function data() {
         return {
@@ -199,7 +230,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 username: '',
                 password: '',
                 groups: [],
-                status: true
+                status: true,
+                realname: ''
+            },
+            auth: {},
+            groups: [],
+            rulesForm: {
+                username: [{ required: true, message: '请输入用户名称', trigger: 'blur' }],
+                realname: [{ required: true, message: '请输入真实姓名', trigger: 'blur' }],
+                groups: [{ required: true, message: '请选择用户组', trigger: 'blur' }]
             }
         };
     },
@@ -219,11 +258,79 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         getList: function getList() {
             var _this = this;
 
-            this.$http.post('/api/admin/list', this.form).then(function (res) {
+            this.$http.post('/api/system/admin/list', this.form).then(function (res) {
                 _this.tableData = res.data.list;
                 _this.totalItems = res.data.total;
                 _this.auth = res.data.auth;
             });
+        },
+        getGroupList: function getGroupList() {
+            var _this2 = this;
+
+            this.$http.get('/api/system/group/list', { status: 1 }).then(function (res) {
+                _this2.groups = res.data.list;
+            });
+        },
+        onSubmit: function onSubmit() {
+            var _this3 = this;
+
+            this.$refs['saveForm'].validate(function (valid) {
+                if (valid) {
+                    if (typeof _this3.saveForm.password === 'undefined') {
+                        _this3.saveForm.password = '';
+                    }
+
+                    if (!_this3.saveForm.id && _this3.saveForm.password.length < 6) {
+                        _this3.$message({
+                            message: '请输入不少于6位的密码',
+                            type: 'error'
+                        });
+
+                        return;
+                    }
+
+                    _this3.$http.post('/api/system/admin/save', _this3.saveForm).then(function (res) {
+                        if (res.error) {
+                            _this3.$message({
+                                message: '保存成功',
+                                type: 'success'
+                            });
+                            _this3.addNewDialog = false;
+                            _this3.getList();
+                        } else {
+                            _this3.$message({
+                                message: res.msg,
+                                type: 'error'
+                            });
+                        }
+                    });
+                } else {
+                    console.log('error submit');
+                    return false;
+                }
+            });
+        },
+        handleAdd: function handleAdd() {
+            this.addNewDialog = true;
+            if (typeof this.$refs['saveForm'] !== 'undefined') {
+                this.$refs['saveForm'].resetFields();
+            }
+        },
+        editRow: function editRow(row) {
+            this.addNewDialog = true;
+            if (typeof this.$refs['saveForm'] !== 'undefined') {
+                this.$refs['saveForm'].resetFields();
+            }
+
+            this.saveForm = {
+                id: row.id,
+                username: row.username,
+                groups: row.groups,
+                realname: row.realname,
+                mobile: row.mobile,
+                email: row.email,
+                status: row.status === 1
+            };
         }
     }
 });
@@ -352,9 +459,16 @@ var render = function() {
       _c(
         "el-row",
         [
-          _c("el-button", { attrs: { type: "primary", size: "small" } }, [
-            _vm._v("新增")
-          ])
+          _vm.auth.canAdd
+            ? _c(
+                "el-button",
+                {
+                  attrs: { type: "primary", size: "small" },
+                  on: { click: _vm.handleAdd }
+                },
+                [_vm._v("新增")]
+              )
+            : _vm._e()
         ],
         1
       ),
@@ -394,7 +508,7 @@ var render = function() {
                         )
                       : _vm._e(),
                     _vm._v(" "),
-                    scope.row.status == 0
+                    scope.row.status == 2
                       ? _c(
                           "el-tag",
                           { attrs: { type: "info", size: "small" } },
@@ -416,7 +530,7 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("el-table-column", {
-            attrs: { prop: "create_time", label: "创建时间" }
+            attrs: { prop: "created_at", label: "创建时间" }
           }),
           _vm._v(" "),
           _c("el-table-column", {
@@ -426,11 +540,20 @@ var render = function() {
                 key: "default",
                 fn: function(scope) {
                   return [
-                    _c(
-                      "el-button",
-                      { attrs: { type: "text", size: "small" } },
-                      [_vm._v("编辑")]
-                    )
+                    _vm.auth.canEdit
+                      ? _c(
+                          "el-button",
+                          {
+                            attrs: { type: "text", size: "small" },
+                            on: {
+                              click: function($event) {
+                                _vm.editRow(scope.row)
+                              }
+                            }
+                          },
+                          [_vm._v("编辑")]
+                        )
+                      : _vm._e()
                   ]
                 }
               }
@@ -494,14 +617,169 @@ var render = function() {
               attrs: {
                 model: _vm.saveForm,
                 "label-width": "100px",
-                size: "small"
+                size: "small",
+                rules: _vm.rulesForm
               }
             },
             [
               _c(
                 "el-form-item",
                 { attrs: { label: "登录名", prop: "username" } },
-                [_c("el-input")],
+                [
+                  _c("el-input", {
+                    staticStyle: { width: "50%" },
+                    model: {
+                      value: _vm.saveForm.username,
+                      callback: function($$v) {
+                        _vm.$set(_vm.saveForm, "username", $$v)
+                      },
+                      expression: "saveForm.username"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "密码", prop: "password" } },
+                [
+                  _c("el-input", {
+                    staticStyle: { width: "50%" },
+                    model: {
+                      value: _vm.saveForm.password,
+                      callback: function($$v) {
+                        _vm.$set(_vm.saveForm, "password", $$v)
+                      },
+                      expression: "saveForm.password"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "用户组", prop: "groups" } },
+                [
+                  _c(
+                    "el-select",
+                    {
+                      staticStyle: { width: "50%" },
+                      attrs: { multiple: "", placeholder: "请选择" },
+                      model: {
+                        value: _vm.saveForm.groups,
+                        callback: function($$v) {
+                          _vm.$set(_vm.saveForm, "groups", $$v)
+                        },
+                        expression: "saveForm.groups"
+                      }
+                    },
+                    _vm._l(_vm.groups, function(item) {
+                      return _c("el-option", {
+                        key: item.id,
+                        attrs: { label: item.title, value: item.id }
+                      })
+                    }),
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "真实姓名", prop: "realname" } },
+                [
+                  _c("el-input", {
+                    staticStyle: { width: "50%" },
+                    model: {
+                      value: _vm.saveForm.realname,
+                      callback: function($$v) {
+                        _vm.$set(_vm.saveForm, "realname", $$v)
+                      },
+                      expression: "saveForm.realname"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "手机号", prop: "mobile" } },
+                [
+                  _c("el-input", {
+                    staticStyle: { width: "50%" },
+                    model: {
+                      value: _vm.saveForm.mobile,
+                      callback: function($$v) {
+                        _vm.$set(_vm.saveForm, "mobile", $$v)
+                      },
+                      expression: "saveForm.mobile"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "邮箱", prop: "email" } },
+                [
+                  _c("el-input", {
+                    staticStyle: { width: "50%" },
+                    model: {
+                      value: _vm.saveForm.email,
+                      callback: function($$v) {
+                        _vm.$set(_vm.saveForm, "email", $$v)
+                      },
+                      expression: "saveForm.email"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "状态", prop: "status" } },
+                [
+                  _c("el-switch", {
+                    attrs: { "active-text": "正常", "inactive-text": "禁用" },
+                    model: {
+                      value: _vm.saveForm.status,
+                      callback: function($$v) {
+                        _vm.$set(_vm.saveForm, "status", $$v)
+                      },
+                      expression: "saveForm.status"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                [
+                  _c(
+                    "el-button",
+                    { attrs: { type: "primary" }, on: { click: _vm.onSubmit } },
+                    [_vm._v("保存")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "el-button",
+                    {
+                      on: {
+                        click: function($event) {
+                          _vm.addNewDialog = false
+                        }
+                      }
+                    },
+                    [_vm._v("取消")]
+                  )
+                ],
                 1
               )
             ],

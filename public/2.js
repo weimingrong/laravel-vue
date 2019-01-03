@@ -169,7 +169,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         getList: function getList() {
             var _this = this;
 
-            this.$http.post('/api/admin/loglist', this.form).then(function (res) {
+            this.$http.post('/api/system/admin/loglist', this.form).then(function (res) {
                 _this.tableData = res.data.data;
                 _this.totalItems = res.data.total;
             });
@@ -276,7 +276,7 @@ var render = function() {
           _c("el-table-column", { attrs: { prop: "ip", label: "操作IP" } }),
           _vm._v(" "),
           _c("el-table-column", {
-            attrs: { prop: "create_time", label: "操作时间" }
+            attrs: { prop: "created_at", label: "操作时间" }
           })
         ],
         1
