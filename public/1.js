@@ -261,10 +261,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var vm = this;
             this.$http.post('/api/admin/avatar/save', { avatar: this.imageUrl }).then(function (res) {
                 if (res.error === 0) {
-                    setTimeout(function () {
-                        console.log(1);
-                        vm.$router.push('/system/profile');
-                    }, 1000);
                     _this3.$message({
                         message: '保存成功',
                         type: 'success'

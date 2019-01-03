@@ -34,7 +34,11 @@ Route::prefix('/api/')->group(function (){
         Route::post('admin/avatar/save', 'AdminController@saveAvatar');
         Route::post('admin/avatar/upload', 'AdminController@uploadAvatar');
         Route::get('admin/userinfo/get', 'AdminController@getUserinfo');
-        //
+        //admin
+        Route::post('admin/list', 'AdminController@getList');
+        Route::post('admin/save', 'AdminController@save');
+        Route::post('group/list', 'GroupController@getList');
+
     });
 
 });

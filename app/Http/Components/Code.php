@@ -3,6 +3,8 @@
 namespace App\Http\Components;
 
 
+use phpDocumentor\Reflection\Types\Self_;
+
 class Code
 {
     const SUCCESS = 0;
@@ -19,6 +21,7 @@ class Code
     const OLD_PASSWORD_WRONG = 1004;
     const LOGIN_TRY_ERROR = 1005;
 
+    const PARAM_ERROR = 2000;
     public static $message = [
         self::SUCCESS => '成功',
         self::FAIL => '失败',
@@ -32,7 +35,9 @@ class Code
         self::OLD_PASSWORD_WRONG => '原密码错误',
         self::LOGIN_ERROR => '用户名或密码错误！',
         self::LOGIN_TRY_ERROR => '输错密码次数太多，请一分钟后再试！',
-        self::NO_PERMISSION => '没有%s的接口权限，请联系管理员！'
+        self::NO_PERMISSION => '没有%s的接口权限，请联系管理员！',
+
+        self::PARAM_ERROR => '参数错误'
     ];
 
     public static function getError($code){

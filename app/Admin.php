@@ -76,4 +76,19 @@ class Admin extends Model
            'avatar' => $avatar
         ]);
     }
+
+    /**
+     * 获取管理员列表
+     * @param $wh
+     * @param $pageSiza
+     * @param $page
+     * @return mixed
+     */
+    public function getList($wh, $pageSize, $page){
+        $data = $this->where($wh)
+            ->orderBy('create_time', 'desc')
+            ->paginate($pageSize, ['*'], 'page', $page)
+            ->toArray();
+        return $data;
+    }
 }
