@@ -16,11 +16,10 @@ class AuthController extends Controller
 {
     protected $loginInfo;
 
+    protected $request;
     public function __construct(Request $request)
     {
-        parent::__construct($request);
-        //检查权限
-//        $this->middleware('admin');
+        $this->request   = $request;
     }
 
     public function getLoginInfo(){
@@ -44,7 +43,7 @@ class AuthController extends Controller
         return false;
     }
     public function canDelete(){
-        $path = dirname($this->request->getPathInfo()) . 'delete';
+        $path = dirname($this->request->getPathInfo()) . '/delete';
         if (Common::checkPermission($path)){
             return true;
         }

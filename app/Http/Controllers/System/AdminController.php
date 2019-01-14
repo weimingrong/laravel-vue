@@ -19,6 +19,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Controller;
 use App\SystemLogs;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends AuthController
 {
@@ -156,7 +157,8 @@ class AdminController extends AuthController
 
         $list['auth'] = [
            'canAdd'  => $this->canAdd(),
-           'canEdit' => $this->canEdit()
+           'canEdit' => $this->canEdit(),
+           'canDelete' => $this->canDelete()
         ];
 
         return $this->sendJson($list);
@@ -184,10 +186,8 @@ class AdminController extends AuthController
         }
         if ($id){
             //edit
-
-        }else{
-            //add
-            Admin::getInstance()->save([
+            $adminId = $id;
+            Admin::getInstance()->update([
                 'username' => $username,
                 'password' => password_hash($password, PASSWORD_DEFAULT, ['cost' => 12]),
                 'realname' => $realname,
@@ -197,14 +197,54 @@ class AdminController extends AuthController
                 'created_at' => date('Y-m-d H:i:s', time()),
                 'updated_at' => date('Y-m-d H:i:s', time()),
             ]);
+        }else{
+            //add
+            $admiId = Admin::getInstance()->insertGetId([
+                'username' => $username,
+                'password' => password_hash($password, PASSWORD_DEFAULT, ['cost' => 12]),
+                'realname' => $realname,
+                'mobile' => $mobile,
+                'email' => $email,
+                'status' => $status,
+                'created_at' => date('Y-m-d H:i:s', time()),
+                'updated_at' => date('Y-m-d H:i:s', time()),
+            ]);
+
         }
 
-        //更新用户组 todo
-
+        //更新用户组
+        $this->saveAdminGroup($admiId, $groups);
+        return $this->sendJson(null);
     }
 
-    public function check(){
+    public function saveAdminGroup($adminId, $groups){
+        GroupAccess::getInstance()->deleteGroupByAdminId($adminId);
+        foreach ($groups as $id){
+            GroupAccess::getInstance()->insertGetId([
+                'group_id' => $id,
+                'uid'      => $adminId,
+                'updated_at' => date('Y-m-d H:i:s', time()),
+                'created_at' => date('Y-m-d H:i:s', time()),
+            ]);
+        }
+    }
 
+    //删除管理员
+    public function delete(){
+        $id = $this->request->id;
+
+        DB::beginTransaction();
+        $groupAccessDel = GroupAccess::getInstance()->deleteGroupByAdminId($id);
+        if (!$groupAccessDel){
+            DB::rollBack();
+        }
+        $adminDel = Admin::getInstance()->where('id', '=', $id)->delete();
+        if (!$adminDel){
+            DB::rollBack();
+        }
+
+        DB::commit();
+        return $this->sendJson(null);
     }
 }
 

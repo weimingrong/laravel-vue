@@ -34,4 +34,10 @@ class GroupAccess extends Model
         $data = $this->select('group_id')->where('uid', '=', $uid)->get()->toArray();
         return isset($data[0]) ? $data[0]['group_id'] : null;
     }
+
+    public function deleteGroupByAdminId($adminId){
+        $data = $this->where('uid', '=', $adminId)->delete();
+        return $data;
+    }
+
 }

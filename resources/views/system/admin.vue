@@ -43,6 +43,8 @@
             <el-table-column fixed="right" label="操作" width="100">
                 <template slot-scope="scope">
                     <el-button type="text" size="small" v-if="auth.canEdit" @click="editRow(scope.row)">编辑</el-button>
+
+                    <el-button type="text" size="small" v-if="auth.canDelete" @click="deleteRow(scope.row)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -230,6 +232,23 @@
                     email: row.email,
                     status: row.status === 1,
                 }
+            },
+            deleteRow(row){
+                this.$http.post('/api/system/admin/delete', {id: row.id}).then(res => {
+                    if (res.error == 0){
+                        this.$message({
+                            message: '删除成功',
+                            type: 'success'
+                        });
+
+                        this.getList();
+                    } else{
+                        this.$message({
+                            message: res.msg,
+                            type: 'error'
+                        });
+                    }
+                })
             }
         }
     }

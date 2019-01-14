@@ -91,4 +91,9 @@ class Admin extends Model
             ->toArray();
         return $data;
     }
+
+    public function deleteAdminById($adminId){
+        $data = $this->where('uid', $adminId)->delete();
+        return $data;
+    }
 }

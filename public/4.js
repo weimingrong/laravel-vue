@@ -87,7 +87,7 @@ exports = module.exports = __webpack_require__(49)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -99,6 +99,8 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
 //
 //
 //
@@ -290,7 +292,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     }
 
                     _this3.$http.post('/api/system/admin/save', _this3.saveForm).then(function (res) {
-                        if (res.error) {
+                        if (res.error == 0) {
                             _this3.$message({
                                 message: '保存成功',
                                 type: 'success'
@@ -331,6 +333,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 email: row.email,
                 status: row.status === 1
             };
+        },
+        deleteRow: function deleteRow(row) {
+            var _this4 = this;
+
+            this.$http.post('/api/system/admin/delete', { id: row.id }).then(function (res) {
+                if (res.error == 0) {
+                    _this4.$message({
+                        message: '删除成功',
+                        type: 'success'
+                    });
+
+                    _this4.getList();
+                } else {
+                    _this4.$message({
+                        message: res.msg,
+                        type: 'error'
+                    });
+                }
+            });
         }
     }
 });
@@ -552,6 +573,21 @@ var render = function() {
                             }
                           },
                           [_vm._v("编辑")]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.auth.canDelete
+                      ? _c(
+                          "el-button",
+                          {
+                            attrs: { type: "text", size: "small" },
+                            on: {
+                              click: function($event) {
+                                _vm.deleteRow(scope.row)
+                              }
+                            }
+                          },
+                          [_vm._v("删除")]
                         )
                       : _vm._e()
                   ]
