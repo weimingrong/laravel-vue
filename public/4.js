@@ -87,7 +87,7 @@ exports = module.exports = __webpack_require__(49)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -99,6 +99,17 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -235,6 +246,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 status: true,
                 realname: ''
             },
+            dialogVisible: false,
+            id: 0,
             auth: {},
             groups: [],
             rulesForm: {
@@ -334,24 +347,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 status: row.status === 1
             };
         },
-        deleteRow: function deleteRow(row) {
+        deleteRow: function deleteRow() {
             var _this4 = this;
 
-            this.$http.post('/api/system/admin/delete', { id: row.id }).then(function (res) {
+            this.$http.post('/api/system/admin/delete', { id: this.id }).then(function (res) {
                 if (res.error == 0) {
                     _this4.$message({
                         message: '删除成功',
                         type: 'success'
                     });
-
-                    _this4.getList();
                 } else {
                     _this4.$message({
                         message: res.msg,
                         type: 'error'
                     });
                 }
+                _this4.dialogVisible = false;
+                _this4.getList();
             });
+        },
+        handleDelete: function handleDelete(row) {
+            this.id = row.id, this.dialogVisible = true;
         }
     }
 });
@@ -583,7 +599,7 @@ var render = function() {
                             attrs: { type: "text", size: "small" },
                             on: {
                               click: function($event) {
-                                _vm.deleteRow(scope.row)
+                                _vm.handleDelete(scope.row)
                               }
                             }
                           },
@@ -702,7 +718,7 @@ var render = function() {
                     "el-select",
                     {
                       staticStyle: { width: "50%" },
-                      attrs: { multiple: "", placeholder: "请选择" },
+                      attrs: { placeholder: "请选择" },
                       model: {
                         value: _vm.saveForm.groups,
                         callback: function($$v) {
@@ -823,6 +839,62 @@ var render = function() {
           )
         ],
         1
+      ),
+      _vm._v(" "),
+      _c(
+        "el-dialog",
+        {
+          attrs: {
+            title: "提示",
+            visible: _vm.dialogVisible,
+            width: "30%",
+            center: ""
+          },
+          on: {
+            "update:visible": function($event) {
+              _vm.dialogVisible = $event
+            }
+          }
+        },
+        [
+          _c("span", [_vm._v("确定删除此管理员吗？")]),
+          _vm._v(" "),
+          _c(
+            "span",
+            {
+              staticClass: "dialog-footer",
+              attrs: { slot: "footer" },
+              slot: "footer"
+            },
+            [
+              _c(
+                "el-button",
+                {
+                  on: {
+                    click: function($event) {
+                      _vm.dialogVisible = false
+                    }
+                  }
+                },
+                [_vm._v("取 消")]
+              ),
+              _vm._v(" "),
+              _c(
+                "el-button",
+                {
+                  attrs: { type: "primary" },
+                  on: {
+                    click: function($event) {
+                      _vm.deleteRow()
+                    }
+                  }
+                },
+                [_vm._v("确 定")]
+              )
+            ],
+            1
+          )
+        ]
       )
     ],
     1

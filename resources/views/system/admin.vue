@@ -44,7 +44,7 @@
                 <template slot-scope="scope">
                     <el-button type="text" size="small" v-if="auth.canEdit" @click="editRow(scope.row)">编辑</el-button>
 
-                    <el-button type="text" size="small" v-if="auth.canDelete" @click="deleteRow(scope.row)">删除</el-button>
+                    <el-button type="text" size="small" v-if="auth.canDelete" @click="handleDelete(scope.row)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -78,7 +78,7 @@
                     <el-input v-model="saveForm.password" style="width: 50%"></el-input>
                 </el-form-item>
                 <el-form-item label="用户组" prop="groups">
-                    <el-select v-model="saveForm.groups" multiple placeholder="请选择" style="width: 50%">
+                    <el-select v-model="saveForm.groups" placeholder="请选择" style="width: 50%">
                         <el-option
                             v-for="item in groups"
                             :key="item.id"
@@ -107,6 +107,17 @@
             </el-form>
         </el-dialog>
 
+        <el-dialog
+                title="提示"
+                :visible.sync="dialogVisible"
+                width="30%"
+                center>
+            <span>确定删除此管理员吗？</span>
+            <span slot="footer" class="dialog-footer">
+         <el-button @click="dialogVisible = false">取 消</el-button>
+         <el-button type="primary" @click="deleteRow()">确 定</el-button>
+     </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -134,6 +145,8 @@
                     status: true,
                     realname: ''
                 },
+                dialogVisible: false,
+                id: 0,
                 auth: {},
                 groups: [],
                 rulesForm: {
@@ -195,14 +208,14 @@
                                     message: '保存成功',
                                     type: 'success'
                                 });
-                                this.addNewDialog = false;
-                                this.getList();
                             } else{
                                 this.$message({
                                     message: res.msg,
                                     type: 'error'
                                 });
                             }
+                            this.addNewDialog = false;
+                            this.getList();
                         })
 
                     }else {
@@ -231,24 +244,29 @@
                     mobile: row.mobile,
                     email: row.email,
                     status: row.status === 1,
-                }
+                };
+
             },
-            deleteRow(row){
-                this.$http.post('/api/system/admin/delete', {id: row.id}).then(res => {
+            deleteRow(){
+                this.$http.post('/api/system/admin/delete', {id: this.id}).then(res => {
                     if (res.error == 0){
                         this.$message({
                             message: '删除成功',
                             type: 'success'
                         });
-
-                        this.getList();
                     } else{
                         this.$message({
                             message: res.msg,
                             type: 'error'
                         });
                     }
+                    this.dialogVisible = false;
+                    this.getList();
                 })
+            },
+            handleDelete(row){
+                this.id = row.id,
+                this.dialogVisible = true;
             }
         }
     }

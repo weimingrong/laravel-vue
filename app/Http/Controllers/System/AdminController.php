@@ -148,8 +148,9 @@ class AdminController extends AuthController
         $res = Admin::getInstance()->getList($wh, $pageSize, $page);
         if ($res['total']){
             foreach ($res['data'] as &$row){
-                $row['last_login'] = date('Y-m-d H:i:s', $row['last_login']);
-                $row['groups'] = GroupAccess::getInstance()->getGroupByUid($row['id']);
+                $row['last_login'] = $row['last_login'] == 0 ? '暂未登录' : date('Y-m-d H:i:s', $row['last_login']);
+                $row['groups'] = (int)GroupAccess::getInstance()->getGroupByUid($row['id']);
+                $row['status'] = (int)$row['status'];
             }
             $list['list'] = $res['data'];
             $list['total'] = $res['total'];
@@ -172,22 +173,26 @@ class AdminController extends AuthController
         $realname = $this->request->realname;
         $mobile = $this->request->mobile;
         $email = $this->request->email;
-        $status = $this->request->status;
+        $status = $this->request->status ? LoginType::NORMAL : LoginType::PROHIBIT;
 
 
         //判断登录名是否已经存在
-        $row = Admin::getInstance()->getRows(['username' => $username]);
-        if ($row){
-            return $this->sendError(Code::ADMIN_EXIST);
+        if (!$id){
+            $row = Admin::getInstance()->getRows(['username' => $username]);
+            if ($row){
+                return $this->sendError(Code::ADMIN_EXIST);
+            }
         }
 
-        if (!in_array($status, LoginType::all())){
-            return $this->sendError(Code::PARAM_ERROR);
-        }
+
         if ($id){
             //edit
+            //不能编辑超级管理员
+            if ($id == 1 ){
+                return;
+            }
             $adminId = $id;
-            Admin::getInstance()->update([
+            $upData = [
                 'username' => $username,
                 'password' => password_hash($password, PASSWORD_DEFAULT, ['cost' => 12]),
                 'realname' => $realname,
@@ -196,10 +201,11 @@ class AdminController extends AuthController
                 'status' => $status,
                 'created_at' => date('Y-m-d H:i:s', time()),
                 'updated_at' => date('Y-m-d H:i:s', time()),
-            ]);
+            ];
+            Admin::getInstance()->updateAdminInfo($adminId, $upData);
         }else{
             //add
-            $admiId = Admin::getInstance()->insertGetId([
+            $adminId = Admin::getInstance()->insertGetId([
                 'username' => $username,
                 'password' => password_hash($password, PASSWORD_DEFAULT, ['cost' => 12]),
                 'realname' => $realname,
@@ -213,20 +219,19 @@ class AdminController extends AuthController
         }
 
         //更新用户组
-        $this->saveAdminGroup($admiId, $groups);
+        $this->saveAdminGroup($adminId, $groups);
         return $this->sendJson(null);
     }
 
-    public function saveAdminGroup($adminId, $groups){
+    public function saveAdminGroup($adminId, $groupsId){
         GroupAccess::getInstance()->deleteGroupByAdminId($adminId);
-        foreach ($groups as $id){
-            GroupAccess::getInstance()->insertGetId([
-                'group_id' => $id,
-                'uid'      => $adminId,
-                'updated_at' => date('Y-m-d H:i:s', time()),
-                'created_at' => date('Y-m-d H:i:s', time()),
-            ]);
-        }
+        GroupAccess::getInstance()->insertGetId([
+            'group_id' => $groupsId,
+            'uid'      => $adminId,
+            'updated_at' => date('Y-m-d H:i:s', time()),
+            'created_at' => date('Y-m-d H:i:s', time()),
+        ]);
+
     }
 
     //删除管理员

@@ -86,7 +86,7 @@ class Admin extends Model
      */
     public function getList($wh, $pageSize, $page){
         $data = $this->where($wh)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'asc')
             ->paginate($pageSize, ['*'], 'page', $page)
             ->toArray();
         return $data;
@@ -94,6 +94,16 @@ class Admin extends Model
 
     public function deleteAdminById($adminId){
         $data = $this->where('uid', $adminId)->delete();
+        return $data;
+    }
+
+    /**
+     * 更新管理员信息
+     * @param $uid
+     * @param $password
+     */
+    public function updateAdminInfo($uid, $upData){
+        $data = $this->where(['id' => $uid])->update($upData);
         return $data;
     }
 }
