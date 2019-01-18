@@ -10,6 +10,7 @@ namespace App;
 
 
 use App\Http\Components\RbacConst;
+use Faker\Provider\DateTime;
 use Illuminate\Database\Eloquent\Model;
 
 class Rule extends Model
@@ -42,4 +43,17 @@ class Rule extends Model
     public function getList($condition = []){
         return $this->where($condition)->orderBy('id', 'asc')->get()->toArray();
     }
+
+    public function saveData($params){
+
+        $model = new self();
+
+        foreach ($params as $key => $value){
+            $model->{$key} = $value;
+        }
+        $model->created_at = date('Y-m-d H:i:s', time());
+        $model->updated_at = date('Y-m-d H:i:s', time());
+        $model->save();
+    }
+
 }

@@ -20,6 +20,8 @@
         "vue": "^2.5.17"
     },
     "dependencies": {
+        "@riophae/vue-treeselect": "0.0.37",
+        "ajv": "^6.7.0",
         "element-ui": "^2.4.11",
         "vue-router": "^3.0.2"
     }

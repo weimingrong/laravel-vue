@@ -39,6 +39,13 @@ Route::prefix('/api/')->group(function (){
         Route::post('admin/save', 'AdminController@save');
         Route::get('group/list', 'GroupController@getList');
         Route::post('admin/delete', 'AdminController@delete');
+
+        //rule
+        Route::get('rule/list', 'RuleController@getTreeList');
+        Route::get('rule/routes', 'RuleController@getAllRoutes');
+        Route::post('rule/save', 'RuleController@save');
+        Route::get('rule/get', 'RuleController@get');
+
     });
 
 });
