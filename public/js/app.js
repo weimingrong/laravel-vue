@@ -52441,7 +52441,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         routeChange: function routeChange(path) {
             var _this = this;
 
-            this.$http.post('/api/get/path/info', { path: path }).then(function (res) {
+            this.$http.post('/api/system/get/path/info', { path: path }).then(function (res) {
                 if (res.error === 0) {
                     _this.navBre = res.data;
                     _this.active = _this.navBre[0].id + '-' + _this.navBre[1].id;

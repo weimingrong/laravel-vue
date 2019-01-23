@@ -148,7 +148,7 @@
                 }
             },
             routeChange(path) {
-                this.$http.post('/api/get/path/info', {path:path}).then(res => {
+                this.$http.post('/api/system/get/path/info', {path:path}).then(res => {
                     if(res.error === 0) {
                         this.navBre = res.data;
                         this.active = this.navBre[0].id + '-' + this.navBre[1].id;
